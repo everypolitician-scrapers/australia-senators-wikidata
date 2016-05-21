@@ -5,6 +5,7 @@ require 'wikidata/fetcher'
 
 urls = [
   'Members of the Australian Senate, 2014–2017',
+  'Members of the Australian Senate, 2011–2014',
 ]
 
 names = urls.map do |url|
