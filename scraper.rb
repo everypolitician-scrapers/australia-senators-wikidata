@@ -3,6 +3,9 @@
 
 require 'wikidata/fetcher'
 
+sparq = 'SELECT ?item WHERE { ?item wdt:P39 wd:Q6814428 . }'
+members = EveryPolitician::Wikidata.sparql(sparq)
+
 urls = [
   'Members of the Australian Senate, 2014–2017',
   'Members of the Australian Senate, 2011–2014',
@@ -23,5 +26,5 @@ names = urls.map do |url|
   ) 
 end.inject(&:|)
 
-EveryPolitician::Wikidata.scrape_wikidata(names: { en: names })
+EveryPolitician::Wikidata.scrape_wikidata(ids: members, names: { en: names })
 
