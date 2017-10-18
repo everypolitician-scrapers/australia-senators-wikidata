@@ -1,6 +1,7 @@
 #!/bin/env ruby
 # encoding: utf-8
 
+require 'everypolitician'
 require 'wikidata/fetcher'
 
 sparq = 'SELECT ?item WHERE { ?item wdt:P39 wd:Q6814428 . }'
@@ -20,11 +21,13 @@ urls = [
 ]
 
 names = urls.map do |url|
-  EveryPolitician::Wikidata.wikipedia_xpath( 
+  EveryPolitician::Wikidata.wikipedia_xpath(
     url: "https://en.wikipedia.org/wiki/#{url}",
     xpath: '//table[.//th[contains(., "Senator")]]//tr[td]//td[1]//a[not(@class="new")]/@title',
-  ) 
+  )
 end.inject(&:|)
 
-EveryPolitician::Wikidata.scrape_wikidata(ids: members, names: { en: names })
+existing = EveryPolitician::Index.new.country("Australia").upper_house.popolo.persons.map(&:wikidata).compact
+
+EveryPolitician::Wikidata.scrape_wikidata(ids: members | existing, names: { en: names })
 
